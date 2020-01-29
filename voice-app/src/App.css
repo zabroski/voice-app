@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.container {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-right: 40px;
+  margin-left:  40px;
+  height:200px;
+  
+  /* min-height: 100vh; */
+}
+
+.container p {
+  text-align: center;
+}
+
