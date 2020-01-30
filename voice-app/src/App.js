@@ -10,7 +10,7 @@ class App extends React.Component {
     };
 
     this.audioPlayer = React.createRef();
-
+  
     // fetch('http://localhost:3000/transform-audio-to-text', {
     //   method: "POST"
     // }).then((response) => {
@@ -22,10 +22,31 @@ class App extends React.Component {
     //   });
     // })
 
+  }
 
-  
+  componentDidMount(){
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(this.handleSuccess);
+
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+       devices = devices.filter((d) => d.kind === 'audioinput');
+       navigator.mediaDevices.getUserMedia({
+        audio: {
+          deviceId: devices[0].deviceId
+        }
+      });
+    });
+    
 
   }
+
+ handleSuccess =(stream) => {
+    if (window.URL) {
+      this.audioPlayer.current.srcObject = stream;
+    } else {
+      this.audioPlayer.current.src = stream;
+      
+    }
+  };
   render(){
 
     return (
@@ -43,29 +64,17 @@ class App extends React.Component {
         </div>
 
 
-        <audio controls ref={this.audioPlayer}></audio>
+        <audio controls ref={this.audioPlayer} ></audio>
         <input type="file" accept="audio/*" onChange={(e) => {
             const file = e.target.files[0];
             const url = URL.createObjectURL(file);
             this.audioPlayer.current.src = url;
         }} />
 
-        <audio controls ref={this.recorder}></audio>
-
-  {/* (stream)  => {
-    if (window.URL) {
-      player.srcObject = stream;
-    } else {
-      this.recorder.current.src = url;
-    }
-  }; */}
-
-    {/* {navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(handleSuccess)}; */}
-        
-
-    
+               
+})
       </div>
-    );
+);
   }
 }
 
