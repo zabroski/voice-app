@@ -9,7 +9,8 @@ class App extends React.Component {
     this.state = {
       record: false,
       audio: undefined,
-      transcript: undefined
+      transcript: undefined,
+      words: []
     }
     this.onStop = this.onStop.bind(this);
   }
@@ -36,10 +37,12 @@ class App extends React.Component {
     let reader = new FileReader();
     reader.readAsDataURL(recordedBlob.blob); 
     reader.onloadend = function() {
-        var base64data = reader.result;    
+        var base64data = reader.result;
+        var baseLanguage = reader.result;    
 
       self.setState({
-        audio: base64data
+        audio: base64data,
+        language: baseLanguage
       });
         
       fetch('http://localhost:3000/transform-audio-to-text', {
@@ -49,28 +52,39 @@ class App extends React.Component {
         },
         
         body: JSON.stringify({
-          base64Audio: base64data
+          base64Audio: base64data,
+          language: baseLanguage
         })
+
       }).then((response) => {
         return response.json()
       }).then((data) => {
 
+
+        console.log(data)
+
         if(data.results[0] !== undefined){
           console.log("data from api to get transcript: ", data.results[0].alternatives[0]);
+          const wordsForState = [];
+          data.results[0].alternatives[0].words.map((altWord) => {
+            wordsForState.push({
+              word: altWord.word,
+              confidence: Math.floor(altWord.confidence * 100)
+            });
+            return null;
+          });
+
           self.setState({
-            transcript: data.results[0].alternatives[0].transcript
+            // transcript: data.results[0].alternatives[0].transcript,
+            words: wordsForState,
           });
           console.log(data.results[0].alternatives[0])
         }
        
       })
       
-      // .then((data) => {
 
-      // })
-        // console.log(base64data);
-        // console.log(this.resut)
-       
+      
     }
   }
 
@@ -83,7 +97,26 @@ class App extends React.Component {
       </div>
       
       <div className="container">
-         <p className="paragrah">{this.state.transcript}</p>
+         <p className="paragrah">
+           {this.state.words.map((stateWord) => {
+             return (
+              <>
+                <span className="tooltip">
+                    {stateWord.word}
+                    <span className="tooltiptext">Accuraty: {stateWord.confidence}%</span>
+                </span>&nbsp;
+              </>)
+           })}
+
+          {/* <span className="tooltip">
+            Laurent
+            <span className="tooltiptext">Accuraty: 80%</span>
+          </span>&nbsp; */}
+
+
+
+           {/* {this.state.transcript} */}
+          </p>
          <img src="images/snake_right" alt="ok" onClick={this.startRecording} type="button"/>
          <button onClick={this.stopRecording} type="button">Stop</button>
         
