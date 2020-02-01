@@ -9,18 +9,22 @@
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  align-items: flex-end;
   margin-right: 40px;
   margin-left:  40px;
   height:200px;
-  
-  /* min-height: 100vh; */
 }
 
-.container p {
+.container button {
+  color: brown;
+  text-align: left;
+}
+
+.paragrah {
   text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline;
+  line-height: 1.6;
 }
 
 .container button {
