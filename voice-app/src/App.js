@@ -37,12 +37,10 @@ class App extends React.Component {
     let reader = new FileReader();
     reader.readAsDataURL(recordedBlob.blob); 
     reader.onloadend = function() {
-        var base64data = reader.result;
-        var baseLanguage = reader.result;    
+        var base64data = reader.result;    
 
       self.setState({
-        audio: base64data,
-        language: baseLanguage
+        audio: base64data
       });
         
       fetch('http://localhost:3000/transform-audio-to-text', {
@@ -52,10 +50,8 @@ class App extends React.Component {
         },
         
         body: JSON.stringify({
-          base64Audio: base64data,
-          language: baseLanguage
+          base64Audio: base64data
         })
-
       }).then((response) => {
         return response.json()
       }).then((data) => {
@@ -84,7 +80,12 @@ class App extends React.Component {
       })
       
 
-      
+      // fetch('http://localhost:3000/', {
+      //   method: "POST",
+      //   body: JSON.stringify({
+
+      //   })
+      // }) 
     }
   }
 
