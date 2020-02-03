@@ -110,8 +110,13 @@ class App extends React.Component {
             })}
             {/* {this.state.transcript} */}
          </p>
-              <img src="snake_right" className="img" alt="ok" onClick={this.startRecording} />
-              {/* {this.state.record && <button onClick={this.stopRecording} type="button">Stop</button>}
+         {this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.startRecording} type="button"*/ />}
+         {!this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.stopRecording} type="button"*/ />}
+       
+             
+
+{/* 
+               {this.state.record && <button onClick={this.stopRecording} type="button">Stop</button>}
               {!this.state.record && <button onClick={this.startRecording} type="button">Start</button>} */}
         
       </div>
