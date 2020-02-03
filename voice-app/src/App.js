@@ -42,7 +42,8 @@ class App extends React.Component {
     let base64data = reader.result;
            
     self.setState({
-        audio: base64data
+        audio: base64data,
+        isLoading: true
       });
         
     fetch('http://localhost:3000/transform-audio-to-text', {
@@ -55,6 +56,7 @@ class App extends React.Component {
           language: self.state.transcriptLanguage,
         })
       }).then((response) => {
+
         return response.json()
       }).then((data) => {
        
@@ -72,6 +74,7 @@ class App extends React.Component {
 
           self.setState({
             // transcript: data.results[0].alternatives[0].transcript,
+            isLoading: false,
             words: wordsForState,
           });
           console.log(data.results[0].alternatives[0])
@@ -111,15 +114,8 @@ class App extends React.Component {
             })}
             {/* {this.state.transcript} */}
          </p>
-         {this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.stopRecording} type="button"*/ />}
-         {!this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.startRecording} type="button"*/ />}
-
-         
-                 
-
-{/* 
-               {this.state.record && <button onClick={this.stopRecording} type="button">Stop</button>}
-              {!this.state.record && <button onClick={this.startRecording} type="button">Start</button>} */}
+        {this.state.record && <button onClick={this.stopRecording} type="button"> <img src="speaker-512.png" className="image" alt="img" /></button>}
+        {!this.state.record && <button onClick={this.startRecording} type="button"><img src="speaker-512.png" className="image" alt="img" /></button>}
         
       </div>
        
@@ -131,7 +127,7 @@ class App extends React.Component {
           }}>
             <option value="fr-FR">French</option>
             <option value="en-US">English</option>
-            <option value="es-mc">Espanish</option>
+            <option value="es-ES">Espanish</option>
           </select>
         {/* < LangSelector /> */}
       </div>

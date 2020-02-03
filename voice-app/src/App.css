@@ -13,12 +13,20 @@
   margin-right: 150px;
   margin-left:  150px;
   height:250px;
+  position: relative;
+  padding: 7px;
   /* margin-top: 30px; */
 }
 
 .container button {
-  color: brown;
-  text-align: left;
+  width: 47px; 
+  top: -10px;
+  right: -20px;
+  background: white;
+  border: none;
+  /* height: 25px; */
+  padding: 10px;
+  position: absolute;
 }
 
 .paragrah {
@@ -27,12 +35,6 @@
   font-family: Arial, Helvetica, sans-serif;
   display: inline;
   line-height: 1.6;
-}
-
-.container button {
-text-align: left;
-position: relative;
-  
 }
 
 
@@ -62,10 +64,8 @@ position: relative;
 
 
 .image {
-  width: 3%;
-  align-items: left;
-  position: relative;
-  bottom: 10px;
+  width: 100%;
+
 }
 
 h3 {
