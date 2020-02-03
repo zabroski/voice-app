@@ -11,7 +11,8 @@ class App extends React.Component {
       audio: undefined,
       transcript: undefined,
       words: [],
-      transcriptLanguage: "en-US"
+      transcriptLanguage: "en-US",
+      isLoading: false
     }
     this.onStop = this.onStop.bind(this);
   }
@@ -44,7 +45,7 @@ class App extends React.Component {
     self.setState({
         audio: base64data,
         isLoading: true
-      });
+    });
         
     fetch('http://localhost:3000/transform-audio-to-text', {
         method: "POST",
@@ -59,8 +60,6 @@ class App extends React.Component {
 
         return response.json()
       }).then((data) => {
-       
-
         if(data.results[0] !== undefined){
           console.log("data from api to get transcript: ", data.results[0].alternatives[0]);
           const wordsForState = [];
@@ -74,14 +73,15 @@ class App extends React.Component {
 
           self.setState({
             // transcript: data.results[0].alternatives[0].transcript,
-            isLoading: false,
             words: wordsForState,
           });
           console.log(data.results[0].alternatives[0])
-          
         }
-       
-      })
+      }).finally(() => {
+        self.setState({
+          isLoading: false,
+        });
+      });
     }
   }
 
@@ -114,6 +114,11 @@ class App extends React.Component {
             })}
             {/* {this.state.transcript} */}
          </p>
+         {this.state.isLoading && 
+          <div className="loader-wrapper">
+            <span className="loader"><span className="loader-inner"></span></span>
+          </div>}
+         
         {this.state.record && <button onClick={this.stopRecording} type="button"> <img src="speaker-512.png" className="image" alt="img" /></button>}
         {!this.state.record && <button onClick={this.startRecording} type="button"><img src="speaker-512.png" className="image" alt="img" /></button>}
         
