@@ -57,7 +57,7 @@ class App extends React.Component {
       }).then((response) => {
         return response.json()
       }).then((data) => {
-        // console.log("I AM RIGHT HERE ",languageData)
+       
 
         if(data.results[0] !== undefined){
           console.log("data from api to get transcript: ", data.results[0].alternatives[0]);
@@ -75,6 +75,7 @@ class App extends React.Component {
             words: wordsForState,
           });
           console.log(data.results[0].alternatives[0])
+          
         }
        
       })
@@ -89,9 +90,9 @@ class App extends React.Component {
           <h1>Web Speech API Demonstartion</h1>
           {!this.state.record && <h3>
             Click on the microphone icon and begin speaking for as    
-              long as you like.
-              
+              long as you like. 
           </h3>}
+
           {this.state.record && <h3>
             Is recording
           </h3>}
@@ -110,10 +111,11 @@ class App extends React.Component {
             })}
             {/* {this.state.transcript} */}
          </p>
-         {this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.startRecording} type="button"*/ />}
-         {!this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.stopRecording} type="button"*/ />}
-       
-             
+         {this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.stopRecording} type="button"*/ />}
+         {!this.state.record && <img src="speaker-512.png" className="image" alt="img" /*onClick={this.startRecording} type="button"*/ />}
+
+         
+                 
 
 {/* 
                {this.state.record && <button onClick={this.stopRecording} type="button">Stop</button>}
