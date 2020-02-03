@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import LangSelector from './component/LangSelector';
+// import LangSelector from './component/LangSelector';
 import { ReactMic } from '@cleandersonlobo/react-mic';
 
 class App extends React.Component {
@@ -10,7 +10,8 @@ class App extends React.Component {
       record: false,
       audio: undefined,
       transcript: undefined,
-      words: []
+      words: [],
+      transcriptLanguage: "en-US"
     }
     this.onStop = this.onStop.bind(this);
   }
@@ -23,7 +24,7 @@ class App extends React.Component {
 
   stopRecording = () => {
     this.setState({
-      record: false
+      record: false 
     });
   }
 
@@ -37,27 +38,26 @@ class App extends React.Component {
     let reader = new FileReader();
     reader.readAsDataURL(recordedBlob.blob); 
     reader.onloadend = function() {
-        var base64data = reader.result;    
-
-      self.setState({
+      
+    let base64data = reader.result;
+           
+    self.setState({
         audio: base64data
       });
         
-      fetch('http://localhost:3000/transform-audio-to-text', {
+    fetch('http://localhost:3000/transform-audio-to-text', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        
         body: JSON.stringify({
-          base64Audio: base64data
+          base64Audio: base64data,
+          language: self.state.transcriptLanguage,
         })
       }).then((response) => {
         return response.json()
       }).then((data) => {
-
-
-        console.log(data)
+        // console.log("I AM RIGHT HERE ",languageData)
 
         if(data.results[0] !== undefined){
           console.log("data from api to get transcript: ", data.results[0].alternatives[0]);
@@ -78,53 +78,55 @@ class App extends React.Component {
         }
        
       })
-      
-
-      // fetch('http://localhost:3000/', {
-      //   method: "POST",
-      //   body: JSON.stringify({
-
-      //   })
-      // }) 
     }
   }
 
   render() {
+    
     return (
       <div className="App">
       <div>
           <h1>Web Speech API Demonstartion</h1>
-          <h3>Click on the microphone icon and begin speaking for as long as you like.</h3>
+          {!this.state.record && <h3>
+            Click on the microphone icon and begin speaking for as    
+              long as you like.
+              
+          </h3>}
+          {this.state.record && <h3>
+            Is recording
+          </h3>}
       </div>
       
       <div className="container">
          <p className="paragrah">
-           {this.state.words.map((stateWord) => {
-             return (
-              <>
-                <span className="tooltip">
-                    {stateWord.word}
-                    <span className="tooltiptext">Accuraty: {stateWord.confidence}%</span>
-                </span>&nbsp;
-              </>)
-           })}
-
-          {/* <span className="tooltip">
-            Laurent
-            <span className="tooltiptext">Accuraty: 80%</span>
-          </span>&nbsp; */}
-
-
-
-           {/* {this.state.transcript} */}
-          </p>
-         <img src="images/snake_right" alt="ok" onClick={this.startRecording} type="button"/>
-         <button onClick={this.stopRecording} type="button">Stop</button>
+            {this.state.words.map((stateWord) => {
+              return (
+                <>
+                  <span className="tooltip">
+                      {stateWord.word}
+                      <span className="tooltiptext">Accuraty: {stateWord.confidence}%</span>
+                  </span>&nbsp;
+                </>)
+            })}
+            {/* {this.state.transcript} */}
+         </p>
+              <img src="snake_right" className="img" alt="ok" onClick={this.startRecording} />
+              {/* {this.state.record && <button onClick={this.stopRecording} type="button">Stop</button>}
+              {!this.state.record && <button onClick={this.startRecording} type="button">Start</button>} */}
         
       </div>
        
       <div>
-        < LangSelector />
+          <select value={this.state.transcriptLanguage} onChange={(e) => {
+            this.setState({
+              transcriptLanguage: e.target.value
+            });
+          }}>
+            <option value="fr-FR">French</option>
+            <option value="en-US">English</option>
+            <option value="es-mc">Espanish</option>
+          </select>
+        {/* < LangSelector /> */}
       </div>
 
         {/* <audio controls src={this.state.audio} ></audio> */}

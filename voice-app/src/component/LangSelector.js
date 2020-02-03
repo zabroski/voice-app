@@ -1,25 +1,26 @@
 import React from 'react';
 
-
 class LangSelector extends React.Component {
-
     constructor (props) {
         super();
-        this.state={}
+        this.state={
+          value:'',
+          }
     }
+    handleChange = (e) => {
+      this.setState(
+        {value: e.target.value})  
+    }
+
     render() {
         return (
-            <select>
-            <option>English</option>
-            <option>Francais</option>
-          </select>,
-    
-          <select className="">
-            <option value="united">United State</option>
-            <option>Canada</option>
-            <option>United State</option>
-            <option>Canada</option>
+        <form onChange={this.handleChange}>
+          <select value={this.state.value} 
+            onChange = {this.handleChange} >
+            <option value="en-US">{this.state.language}English</option>
+            <option value="fr-FR">{this.state.language}Francais</option>
           </select>
+        </form>
         )
     }
 }
